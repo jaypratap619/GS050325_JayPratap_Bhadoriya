@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
+import logo from "../assets/Gsynergy Logo V2 Long Description.svg"
 
 const Navbar = () => {
   return (
-    <nav className="bg-gray-800 text-white p-4 flex items-center justify-between">
-      <Link to="/" className="text-xl font-bold">
-        GSynergy
+    <nav className="bg-white shadow-xl p-4 w-full">
+      <Link to="/">
+        {/* Add the logo image */}
+        <img src={logo} alt="Gsynergy Logo" className="h-10" />
       </Link>
     </nav>
   );
