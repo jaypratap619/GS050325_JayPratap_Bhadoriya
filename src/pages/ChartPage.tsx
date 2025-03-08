@@ -10,11 +10,6 @@ const ChartPage: React.FC = () => {
   const plans = useSelector((state: RootState) => state.plans.plans);
 
   const [selectedStore, setSelectedStore] = useState<string>(stores[0]?.id || "");
-  const [hiddenGraphs, setHiddenGraphs] = useState<Record<string, boolean>>({
-    gmDollars: false,
-    gmPercent: false,
-  });
-
   // Generate chart data for the selected store
   const chartData = useMemo(() => {
     if (!selectedStore) return [];
@@ -75,15 +70,12 @@ const ChartPage: React.FC = () => {
             <Legend
               wrapperStyle={{ cursor: "pointer" }}
             />
-            {!hiddenGraphs.gmDollars && (
               <Bar
                 yAxisId="left"
                 dataKey="gmDollars"
                 fill="#8884d8"
                 name="GM Dollars"
               />
-            )}
-            {!hiddenGraphs.gmPercent && (
               <Line
                 yAxisId="right"
                 type="monotone"
@@ -92,7 +84,6 @@ const ChartPage: React.FC = () => {
                 name="GM %"
                 strokeWidth={3} // Make the line thicker
               />
-            )}
           </ComposedChart>
         </ResponsiveContainer>
       </div>
