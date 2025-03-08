@@ -15,3 +15,19 @@ export interface ISKU {
   price: number;
   cost: number;
 }
+
+// Define the Calender interface
+export interface ICalendar {
+  week: string;
+  weekLabel: string;
+  month: string;
+  monthLabel: string;
+}
+
+// Define the Plan interface
+export interface Iplan {
+  store: string;
+  sku: string;
+  week: string;
+  salesUnit: number;
+}

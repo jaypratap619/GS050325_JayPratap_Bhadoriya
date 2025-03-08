@@ -92,8 +92,8 @@ const StoresPage: React.FC = () => {
 
   return (
     <div className="p-4">
-      <h1 className="text-xl font-semibold mb-4">Stores</h1>
-      <div className="flex gap-2 mb-4">
+      <h1 className="text-xl font-semibold pb-4">Stores</h1>
+      <div className="flex gap-2 pb-4">
         <input
           type="text"
           placeholder="ID"

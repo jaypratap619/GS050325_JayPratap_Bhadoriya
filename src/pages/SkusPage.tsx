@@ -103,8 +103,8 @@ const SkusPage: React.FC = () => {
 
   return (
     <div className="p-4">
-      <h1 className="text-md font-semibold mb-4">SKUs</h1>
-      <div className="flex flex-wrap gap-1 mb-4">
+      <h1 className="text-md font-semibold pb-4">SKUs</h1>
+      <div className="flex flex-wrap gap-1 pb-4">
         <input
           type="text"
           placeholder="ID"
