@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addStore, removeStore, updateStore, reorderStores } from "../redux/storesSlice";
+import { addStore, removeStore, reorderStores } from "../redux/storesSlice";
 import { RootState } from "../redux/store";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS
@@ -16,6 +16,7 @@ const StoresPage: React.FC = () => {
   const dispatch = useDispatch();
   const stores = useSelector((state: RootState) => state.stores.stores);
   const [newStore, setNewStore] = useState<IStore>({ id: "", label: "", city: "", state: "" });
+  const [isAccordionOpen, setIsAccordionOpen] = useState(false); // State for accordion toggle
 
   // Initialize columnDefs inside useState/useEffect to avoid undefined issues
   const [columnDefs, setColumnDefs] = useState<ColDef<IStore>[]>([]);
@@ -30,14 +31,14 @@ const StoresPage: React.FC = () => {
       {
         headerName: "Actions",
         cellRenderer: (params: any) => (
-          <div>
-            <button onClick={() => handleRemoveStore(params.data.id)}>Remove</button>
-            <button onClick={() => handleUpdateStore({ ...params.data, label: "Updated Label" })}>
-              Update
-            </button>
-          </div>
+          <button
+            onClick={() => handleRemoveStore(params.data.id)}
+            className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+          >
+            Remove
+          </button>
         ),
-        width: 200,
+        width: 120,
       },
     ]);
   }, []);
@@ -86,55 +87,88 @@ const StoresPage: React.FC = () => {
     dispatch(removeStore(id));
   };
 
-  const handleUpdateStore = (store: IStore) => {
-    dispatch(updateStore(store));
-  };
-
   return (
-    <div className="p-4">
-      <h1 className="text-xl font-semibold pb-4">Stores</h1>
-      <div className="flex gap-2 pb-4">
-        <input
-          type="text"
-          placeholder="ID"
-          value={newStore.id}
-          onChange={(e) => setNewStore({ ...newStore, id: e.target.value })}
-          className="border p-2"
-        />
-        <input
-          type="text"
-          placeholder="Label"
-          value={newStore.label}
-          onChange={(e) => setNewStore({ ...newStore, label: e.target.value })}
-          className="border p-2"
-        />
-        <input
-          type="text"
-          placeholder="City"
-          value={newStore.city}
-          onChange={(e) => setNewStore({ ...newStore, city: e.target.value })}
-          className="border p-2"
-        />
-        <input
-          type="text"
-          placeholder="State"
-          value={newStore.state}
-          onChange={(e) => setNewStore({ ...newStore, state: e.target.value })}
-          className="border p-2"
-        />
-        <button onClick={handleAddStore} className="bg-blue-500 text-white px-4 py-2">
-          Add Store
-        </button>
+    <div className="p-6 bg-gray-100 min-h-screen">
+      <h1 className="text-xl font-bold text-gray-800 mb-6">Stores Management</h1>
+
+      {/* Data Grid Section */}
+      <div className="bg-white p-6 rounded-lg shadow-md mb-6">
+        <h2 className="text-lg font-semibold text-gray-700 mb-4">Stores List</h2>
+        {stores.length > 0 && columnDefs.length > 0 ? (
+          <div className="ag-theme-quartz" style={{ height: 400, width: "100%" }}>
+            <AgGridReact<IStore> rowData={stores} columnDefs={columnDefs} defaultColDef={defaultColDef} />
+          </div>
+        ) : (
+          <p className="text-gray-600">Loading data...</p>
+        )}
       </div>
 
-      {/* Ensure data is available before rendering AgGridReact */}
-      {stores.length > 0 && columnDefs.length > 0 ? (
-        <div className="ag-theme-quartz" style={{ height: 400, width: "100%" }}>
-          <AgGridReact<IStore> rowData={stores} columnDefs={columnDefs} defaultColDef={defaultColDef} />
-        </div>
-      ) : (
-        <p>Loading data...</p>
-      )}
+      {/* Accordion for Add New Store */}
+      <div className="bg-white p-6 rounded-lg shadow-md">
+        <button
+          onClick={() => setIsAccordionOpen(!isAccordionOpen)}
+          className="w-full text-left text-lg font-semibold text-gray-700 focus:outline-none"
+        >
+          Add a New Store
+          <span className="float-right transform transition-transform duration-200">
+            {isAccordionOpen ? "▲" : "▼"}
+          </span>
+        </button>
+
+        {/* Accordion Content */}
+        {isAccordionOpen && (
+          <div className="mt-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">ID</label>
+                <input
+                  type="text"
+                  placeholder="Enter ID"
+                  value={newStore.id}
+                  onChange={(e) => setNewStore({ ...newStore, id: e.target.value })}
+                  className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Label</label>
+                <input
+                  type="text"
+                  placeholder="Enter Label"
+                  value={newStore.label}
+                  onChange={(e) => setNewStore({ ...newStore, label: e.target.value })}
+                  className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">City</label>
+                <input
+                  type="text"
+                  placeholder="Enter City"
+                  value={newStore.city}
+                  onChange={(e) => setNewStore({ ...newStore, city: e.target.value })}
+                  className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">State</label>
+                <input
+                  type="text"
+                  placeholder="Enter State"
+                  value={newStore.state}
+                  onChange={(e) => setNewStore({ ...newStore, state: e.target.value })}
+                  className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+            </div>
+            <button
+              onClick={handleAddStore}
+              className="mt-4 bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              Add Store
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
