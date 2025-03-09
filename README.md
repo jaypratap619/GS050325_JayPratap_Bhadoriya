@@ -42,7 +42,11 @@ The source code for this project is available on GitHub:
    - The app is designed to be responsive with a minimum width of 1080 pixels.
 
 6. **Deployment**:
+
    - The app is deployed on Vercel with a CI/CD pipeline that automatically deploys changes when code is pushed to the `main` branch.
+
+7. **Authentcation**:
+   - Implement Authentication using Firebase
 
 ---
 
@@ -75,23 +79,26 @@ The source code for this project is available on GitHub:
    - Add logging for errors and warnings to improve debugging and monitoring in production.
 
 7. **CI/CD Pipeline**:
+
    - Set up a CI/CD pipeline using Vercel for automatic deployment, ensuring seamless updates.
+
+8. **Authentcation**:
+
+   - Added authentication with help of firebase
+
+9. **Responsive**:
+   - App is responsive for all screen sizes.
 
 ---
 
 ## What I Would Improve with More Time
 
-1. **Authentication**:
-
-   - Implement authentication using a common provider (e.g., Firebase) to allow users to sign in and sign out.
-   - This would enhance the app's security and provide a personalized experience.
-
-2. **Jest Test Cases**:
+1. **Jest Test Cases**:
 
    - Write unit tests using Jest to ensure the reliability of components and state management logic.
    - Test-driven development (TDD) would improve code quality and reduce bugs.
 
-3. **Calculation Logic on Planning Page**:
+2. **Calculation Logic on Planning Page**:
 
    - Complete the calculation logic for Sales Dollars, GM Dollars, and GM % on the Planning page.
    - Ensure the calculations are accurate and dynamically update based on user input.
