@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react"; // Add useState
 import { useDispatch } from "react-redux";
 import StoresPage from "./pages/StoresPage";
 import SkusPage from "./pages/SkusPage";
@@ -17,7 +17,8 @@ import * as XLSX from "xlsx";
 
 function App() {
   const dispatch = useDispatch();
-  
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // State to control sidebar visibility
+
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -97,11 +98,19 @@ function App() {
   return (
     <Router>
       <div className="flex flex-col min-h-screen">
-        <Navbar />
+        <Navbar toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} /> {/* Pass toggle function to Navbar */}
         <div className="flex flex-1">
-          <Sidebar />
-          <div className="flex-1 p-3 bg-gray-100">
-            <div className="bg-white rounded-lg shadow-sm p-6">
+          {/* Sidebar with responsive visibility */}
+          <div
+            className={`fixed inset-y-0 left-0 z-30 w-64 bg-white text-gray-800 shadow-md transform transition-transform duration-200 ease-in-out ${
+              isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+            } md:translate-x-0 md:relative`}
+          >
+            <Sidebar closeSidebar={() => setIsSidebarOpen(false)} /> {/* Pass closeSidebar function */}
+          </div>
+          {/* Main content area with reduced padding for mobile */}
+          <div className="flex-1 p-2 md:p-3 bg-gray-100"> {/* Reduced padding for mobile */}
+            <div className="bg-white rounded-lg shadow-sm p-4 md:p-6"> {/* Reduced padding for mobile */}
               <Routes>
                 <Route
                   path="/"

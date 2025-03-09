@@ -10,6 +10,7 @@ const ChartPage: React.FC = () => {
   const plans = useSelector((state: RootState) => state.plans.plans);
 
   const [selectedStore, setSelectedStore] = useState<string>(stores[0]?.id || "");
+
   // Generate chart data for the selected store
   const chartData = useMemo(() => {
     if (!selectedStore) return [];
@@ -35,13 +36,13 @@ const ChartPage: React.FC = () => {
   }, [selectedStore, calendar, plans, skus]);
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1 className="text-xl font-semibold pb-4">Charts</h1>
-      <div style={{ marginBottom: "20px", border: "1px solid #ccc", borderRadius: "5px", padding: "10px", width: "fit-content" }}>
+    <div className="p-2 md:p-4"> {/* Reduced padding for mobile */}
+      <h1 className="text-xl font-semibold pb-2 md:pb-4">Charts</h1> {/* Adjusted margin for mobile */}
+      <div className="mb-2 md:mb-4 border border-gray-300 rounded-lg p-2 md:p-4 w-full md:w-fit"> {/* Reduced padding for mobile */}
         <select
           value={selectedStore}
           onChange={(e) => setSelectedStore(e.target.value)}
-          style={{ padding: "5px", fontSize: "16px" }}
+          className="p-2 text-sm md:text-base"
         >
           {stores.map((store) => (
             <option key={store.id} value={store.id}>
@@ -51,39 +52,17 @@ const ChartPage: React.FC = () => {
         </select>
       </div>
 
-      <div style={{ width: "100%", height: "400px", padding: "20px", border: "1px solid #ccc", borderRadius: "5px" }}>
+      <div className="w-full h-96 p-2 md:p-4 border border-gray-300 rounded-lg"> {/* Reduced padding for mobile */}
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="week" />
-            <YAxis
-              yAxisId="left"
-              label={{ value: "GM Dollars", angle: -90, position: "insideLeft", offset: 10 }} // Add padding to Y-axis label
-              padding={{  }} // Add padding to prevent overlapping
-            />
-            <YAxis
-              yAxisId="right"
-              orientation="right"
-              label={{ value: "GM %", angle: -90, position: "insideRight" }}
-            />
+            <YAxis yAxisId="left" label={{ value: "GM Dollars", angle: -90, position: "insideLeft" }} />
+            <YAxis yAxisId="right" orientation="right" label={{ value: "GM %", angle: -90, position: "insideRight" }} />
             <Tooltip />
-            <Legend
-              wrapperStyle={{ cursor: "pointer" }}
-            />
-              <Bar
-                yAxisId="left"
-                dataKey="gmDollars"
-                fill="#8884d8"
-                name="GM Dollars"
-              />
-              <Line
-                yAxisId="right"
-                type="monotone"
-                dataKey="gmPercent"
-                stroke="#82ca9d"
-                name="GM %"
-                strokeWidth={3} // Make the line thicker
-              />
+            <Legend />
+            <Bar yAxisId="left" dataKey="gmDollars" fill="#8884d8" name="GM Dollars" />
+            <Line yAxisId="right" type="monotone" dataKey="gmPercent" stroke="#82ca9d" name="GM %" strokeWidth={3} />
           </ComposedChart>
         </ResponsiveContainer>
       </div>

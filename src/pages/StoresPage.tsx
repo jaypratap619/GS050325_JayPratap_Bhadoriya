@@ -88,12 +88,12 @@ const StoresPage: React.FC = () => {
   };
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
-      <h1 className="text-xl font-bold text-gray-800 mb-6">Stores Management</h1>
+    <div className="p-2 md:p-6 bg-gray-100 min-h-screen"> {/* Reduced padding for mobile */}
+      <h1 className="text-xl font-bold text-gray-800 mb-4 md:mb-6">Stores Management</h1> {/* Adjusted margin for mobile */}
 
       {/* Data Grid Section */}
-      <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-        <h2 className="text-lg font-semibold text-gray-700 mb-4">Stores List</h2>
+      <div className="bg-white p-4 md:p-6 rounded-lg shadow-md mb-4 md:mb-6"> {/* Reduced padding for mobile */}
+        <h2 className="text-lg font-semibold text-gray-700 mb-2 md:mb-4">Stores List</h2> {/* Adjusted margin for mobile */}
         {stores.length > 0 && columnDefs.length > 0 ? (
           <div className="ag-theme-quartz" style={{ height: 400, width: "100%" }}>
             <AgGridReact<IStore> rowData={stores} columnDefs={columnDefs} defaultColDef={defaultColDef} />
@@ -104,7 +104,7 @@ const StoresPage: React.FC = () => {
       </div>
 
       {/* Accordion for Add New Store */}
-      <div className="bg-white p-6 rounded-lg shadow-md">
+      <div className="bg-white p-4 md:p-6 rounded-lg shadow-md"> {/* Reduced padding for mobile */}
         <button
           onClick={() => setIsAccordionOpen(!isAccordionOpen)}
           className="w-full text-left text-lg font-semibold text-gray-700 focus:outline-none"
@@ -118,7 +118,7 @@ const StoresPage: React.FC = () => {
         {/* Accordion Content */}
         {isAccordionOpen && (
           <div className="mt-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">ID</label>
                 <input

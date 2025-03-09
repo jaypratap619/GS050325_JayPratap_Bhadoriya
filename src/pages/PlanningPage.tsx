@@ -35,7 +35,7 @@ const PlanningPage: React.FC = () => {
     );
 
     // Slice the rowData to get only the first 10 elements
-    return rowData
+    return rowData;
   }, [stores, skus]);
 
   // Define default column definitions
@@ -58,8 +58,8 @@ const PlanningPage: React.FC = () => {
   console.log("ColumnDefs:", columnDefs);
 
   return (
-    <div className="p-4">
-      <h1 className="text-md font-semibold pb-4">Plannings</h1>
+    <div className="p-2 md:p-4"> {/* Reduced padding for mobile */}
+      <h1 className="text-md font-semibold pb-2 md:pb-4">Plannings</h1> {/* Adjusted margin for mobile */}
       <div className="ag-theme-alpine" style={{ height: "500px", width: "100%" }}>
         <AgGridReact
           columnDefs={columnDefs}
