@@ -1,5 +1,6 @@
+// src/App.tsx
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { useEffect, useState } from "react"; // Add useState
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import StoresPage from "./pages/StoresPage";
 import SkusPage from "./pages/SkusPage";
@@ -14,10 +15,13 @@ import { reorderCalendar } from "./redux/calendarSlice";
 import { reorderCalculations } from "./redux/calculationsSlice";
 import { reorderPlans } from "./redux/planningSlice";
 import * as XLSX from "xlsx";
+import Login from "./components/Login";
+import Signup from "./components/SignUp";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   const dispatch = useDispatch();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // State to control sidebar visibility
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     const loadData = async () => {
@@ -98,7 +102,7 @@ function App() {
   return (
     <Router>
       <div className="flex flex-col min-h-screen">
-        <Navbar toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} /> {/* Pass toggle function to Navbar */}
+        <Navbar toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
         <div className="flex flex-1">
           {/* Sidebar with responsive visibility */}
           <div
@@ -106,17 +110,17 @@ function App() {
               isSidebarOpen ? "translate-x-0" : "-translate-x-full"
             } md:translate-x-0 md:relative`}
           >
-            <Sidebar closeSidebar={() => setIsSidebarOpen(false)} /> {/* Pass closeSidebar function */}
+            <Sidebar closeSidebar={() => setIsSidebarOpen(false)} />
           </div>
           {/* Main content area with reduced padding for mobile */}
-          <div className="flex-1 p-2 md:p-3 bg-gray-100"> {/* Reduced padding for mobile */}
-            <div className="bg-white rounded-lg shadow-sm p-4 md:p-6"> {/* Reduced padding for mobile */}
+          <div className="flex-1 p-2 md:p-3 bg-gray-100">
+            <div className="bg-white rounded-lg shadow-sm p-4 md:p-6">
               <Routes>
                 <Route
                   path="/"
                   element={
                     <ErrorBoundary fallback={<h1>Something went wrong in the Stores Page.</h1>}>
-                      <StoresPage />
+                      <ProtectedRoute><StoresPage /></ProtectedRoute>
                     </ErrorBoundary>
                   }
                 />
@@ -124,7 +128,7 @@ function App() {
                   path="/skus"
                   element={
                     <ErrorBoundary fallback={<h1>Something went wrong in the SKUs Page.</h1>}>
-                      <SkusPage />
+                      <ProtectedRoute><SkusPage /></ProtectedRoute>
                     </ErrorBoundary>
                   }
                 />
@@ -132,7 +136,7 @@ function App() {
                   path="/planning"
                   element={
                     <ErrorBoundary fallback={<h1>Something went wrong in the Planning Page.</h1>}>
-                      <PlanningPage />
+                      <ProtectedRoute><PlanningPage /></ProtectedRoute>
                     </ErrorBoundary>
                   }
                 />
@@ -140,10 +144,12 @@ function App() {
                   path="/chart"
                   element={
                     <ErrorBoundary fallback={<h1>Something went wrong in the Chart Page.</h1>}>
-                      <ChartPage />
+                      <ProtectedRoute><ChartPage /></ProtectedRoute>
                     </ErrorBoundary>
                   }
                 />
+                <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<Signup />} />
               </Routes>
             </div>
           </div>
