@@ -16,7 +16,7 @@ import { reorderCalculations } from "./redux/calculationsSlice";
 import { reOrderPlans } from "./redux/planningSlice";
 import * as XLSX from "xlsx";
 import Login from "./components/Login";
-import Signup from "./components/Signup";
+import SignUp from "./components/Signup";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
@@ -149,7 +149,7 @@ function App() {
                   }
                 />
                 <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<Signup />} />
+                <Route path="/signup" element={<SignUp />} />
               </Routes>
             </div>
           </div>
