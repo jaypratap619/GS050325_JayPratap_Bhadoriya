@@ -5,6 +5,7 @@ import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import { RootState } from "../redux/store";
 import { updateSalesUnits } from "../redux/planningSlice";
+import { ICellRendererParams } from "ag-grid-community";
 
 const weeks = Array.from({ length: 52 }, (_, i) => `W${String(i + 1).padStart(2, "0")}`);
 
@@ -112,7 +113,7 @@ const PlanningPage: React.FC = () => {
             headerName: "GM %",
             editable: false,
             width: 160,
-            cellStyle: (params) => ({
+            cellStyle: (params: ICellRendererParams) => ({
               backgroundColor:
                 params.value >= 40 ? "green" :
                 params.value >= 10 ? "yellow" :
