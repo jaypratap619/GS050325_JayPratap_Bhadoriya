@@ -1,23 +1,26 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Iplan } from "./types";
+import { IPlan } from "./types";
 
-interface PlansState {
-  plans: Iplan[];
+interface IPlanningState {
+  rowData: IPlan[];
 }
 
-const initialState: PlansState = {
-  plans: [],
+const initialState: IPlanningState = {
+  rowData: [],
 };
 
 const planningSlice = createSlice({
-  name: "plans",
+  name: "planning",
   initialState,
   reducers: {
-    reorderPlans: (state, action: PayloadAction<Iplan[]>) => {
-      state.plans = action.payload;
+    updateSalesUnits: (state, action: PayloadAction<IPlan[]>) => {
+      state.rowData = action.payload;
+    },
+    reOrderPlans: (state, action: PayloadAction<IPlan[]>) => {
+      state.rowData = action.payload; // Assuming new order of plans is passed
     },
   },
 });
 
-export const { reorderPlans } = planningSlice.actions;
+export const { updateSalesUnits, reOrderPlans } = planningSlice.actions;
 export default planningSlice.reducer;

@@ -13,7 +13,7 @@ import { reorderStores } from "./redux/storesSlice";
 import { reorderSKUs } from "./redux/skusSlice";
 import { reorderCalendar } from "./redux/calendarSlice";
 import { reorderCalculations } from "./redux/calculationsSlice";
-import { reorderPlans } from "./redux/planningSlice";
+import { reOrderPlans } from "./redux/planningSlice";
 import * as XLSX from "xlsx";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
@@ -75,7 +75,7 @@ function App() {
           week: item["Week"],
           salesUnit: item["Sales Units"],
         }));
-        dispatch(reorderPlans(plans));
+        dispatch(reOrderPlans(plans));
 
         // Load Calculations
         const calculationsSheet = workbook.Sheets[sheetNames[4]];

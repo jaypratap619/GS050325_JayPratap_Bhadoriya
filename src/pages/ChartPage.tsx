@@ -7,7 +7,7 @@ const ChartPage: React.FC = () => {
   const stores = useSelector((state: RootState) => state.stores.stores);
   const skus = useSelector((state: RootState) => state.skus.skus);
   const calendar = useSelector((state: RootState) => state.calendar.calendar);
-  const plans = useSelector((state: RootState) => state.plans.plans);
+  const plans = useSelector((state: RootState) => state.planning.rowData);
 
   const [selectedStore, setSelectedStore] = useState<string>(stores[0]?.id || "");
 

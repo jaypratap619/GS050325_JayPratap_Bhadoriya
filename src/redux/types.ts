@@ -25,7 +25,7 @@ export interface ICalendar {
 }
 
 // Define the Plan interface
-export interface Iplan {
+export interface IPlan {
   store: string;
   sku: string;
   week: string;
