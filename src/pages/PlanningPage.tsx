@@ -1,34 +1,27 @@
-import React, { useEffect, useState, useCallback, useMemo } from "react";
+import React, { useMemo, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import { RootState } from "../redux/store";
 import { updateSalesUnits } from "../redux/planningSlice";
-import { ICellRendererParams } from "ag-grid-community";
-
-const weeks = Array.from({ length: 52 }, (_, i) => `W${String(i + 1).padStart(2, "0")}`);
+import { ICellRendererParams, ValueSetterParams } from "ag-grid-community";
 
 const PlanningPage: React.FC = () => {
+  const weeks = useMemo(() => Array.from({ length: 52 }, (_, i) => `W${String(i + 1).padStart(2, "0")}`), []);
   const dispatch = useDispatch();
+
+  // Fetch plans directly from Redux
   const plans = useSelector((state: RootState) => state.planning.rowData || []);
   const skus = useSelector((state: RootState) => state.skus.skus || []);
 
-  const [rowData, setRowData] = useState<any[]>([]);
+  // Transform data for AG Grid
+  const rowData = useMemo(() => {
+    if (plans.length === 0 || skus.length === 0) return [];
 
-  useEffect(() => {
-    if (plans.length > 0 && skus.length > 0) {
-      const transformedData = transformPlanningData(plans, skus);
-      setRowData(transformedData);
-    }
-  }, [plans, skus]);
-
-  const transformPlanningData = (plans: any[], skus: any[]) => {
     const groupedData: { [key: string]: any } = {};
-
     plans.forEach(({ store, sku, week, salesUnit }) => {
       const key = `${store}_${sku}`;
-
       if (!groupedData[key]) {
         groupedData[key] = {
           store,
@@ -61,40 +54,19 @@ const PlanningPage: React.FC = () => {
     });
 
     return Object.values(groupedData);
-  };
+  }, [plans, skus, weeks]);
 
   const onCellValueChanged = useCallback(
-    (params: any) => {
-      if (!params.colDef.field.includes("salesUnits")) return;
+    (params: ValueSetterParams) => {
+      if (!params.colDef.field?.includes("salesUnits")) return;
+      const week = params.colDef.field.substring(0, 3);
+      const store = params.data.store;
+      const sku = params.data.sku;
+      const salesUnit = Number(params.newValue) || 0; // Ensure it's a valid number
 
-      const updatedData = rowData.map((row) => {
-        if (row.sku === params.data.sku && row.store === params.data.store) {
-          const updatedRow = { ...row };
-          updatedRow[params.colDef.field] = params.newValue;
-
-          weeks.forEach((week) => {
-            const skuDetails = skus.find((s) => s.id === updatedRow.sku);
-            if (skuDetails) {
-              const salesUnit = updatedRow[`${week}_salesUnits`] || 0;
-              updatedRow[`${week}_salesDollars`] = salesUnit * skuDetails.price;
-              updatedRow[`${week}_costDollars`] = salesUnit * skuDetails.cost;
-              updatedRow[`${week}_gmDollars`] =
-                updatedRow[`${week}_salesDollars`] - updatedRow[`${week}_costDollars`];
-              updatedRow[`${week}_gmPercent`] = updatedRow[`${week}_salesDollars`]
-                ? (updatedRow[`${week}_gmDollars`] / updatedRow[`${week}_salesDollars`]) * 100
-                : 0;
-            }
-          });
-
-          return updatedRow;
-        }
-        return row;
-      });
-
-      setRowData(updatedData);
-      dispatch(updateSalesUnits(updatedData));
+      dispatch(updateSalesUnits({ store, sku, week, salesUnit }));
     },
-    [rowData, dispatch, skus]
+    [dispatch]
   );
 
   const columnDefs = useMemo(
@@ -125,7 +97,7 @@ const PlanningPage: React.FC = () => {
         ],
       })),
     ],
-    []
+    [weeks]
   );
 
   return (
@@ -135,6 +107,7 @@ const PlanningPage: React.FC = () => {
         columnDefs={columnDefs}
         onCellValueChanged={onCellValueChanged}
         defaultColDef={{ flex: 1, resizable: true, minWidth: 160 }}
+        animateRows={true}
       />
     </div>
   );
