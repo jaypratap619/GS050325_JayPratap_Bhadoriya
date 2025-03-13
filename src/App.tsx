@@ -16,7 +16,7 @@ import { reorderCalculations } from "./redux/calculationsSlice";
 import { reOrderPlans } from "./redux/planningSlice";
 import * as XLSX from "xlsx";
 import Login from "./components/Login";
-import SignUp from "./components/SignUp";
+import SignUp from "./components/Signup";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
